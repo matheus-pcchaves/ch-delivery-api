@@ -39,5 +39,9 @@ export class Left<L, R> {
   }
   
   export const right = <L, R>(value: R): Either<L, R> => {
-    return new Right(value)
+    try {
+      return new Right(value)
+    } catch (error) {
+      null
+    }
   }

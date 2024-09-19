@@ -11,7 +11,7 @@ export class UserExistsError extends Error implements UseCaseError {
     constructor(identifier: string) {
       super(`E-mail "${identifier}" already exists.`)
     }
-  }
+}
 
 export abstract class HashGenerator {
     abstract hash(plain: string): Promise<string>

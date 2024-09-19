@@ -1,4 +1,4 @@
-/*import { Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { SolicitationsRepository } from "src/domain/repositories/solicitations-repository";
 import { PrismaService } from "../prisma.service";
 import { PrismaSolicitationMapper } from "../mappers/prisma-solicitation-mapper";
@@ -18,34 +18,19 @@ export class PrismaSolicitationRepository implements SolicitationsRepository {
         })
     }
 
-    async findByUser(customerId: string): Promise<Solicitation | null> {
+    async findByUser(customerId: string): Promise<Solicitation[] | null> {
         const solicitationByUser = await this.prisma.solicitations.findMany({
             where: {
                 customerId
+            },
+            select: {
+                productName: true,
+                status: true,
+                receiverAddress: true,
+                createdAt: true
             }
         })
 
-        return PrismaSolicitationMapper.toDomain(solicitationByUser)
+        return solicitationByUser.map(PrismaSolicitationMapper.toDomain)
     }
-
-    async findById(id: string): Promise<Solicitation | null> {
-        const solicitation = await this.prisma.solicitations.findUnique({
-            where: {
-                id,
-            }
-        })
-
-        if (!solicitation) {
-            return null
-        }
-
-        return PrismaSolicitationMapper.toDomain(solicitation)
-    }
-
-    updateShipperAddress(id: string): Promise<Solicitation | null> {
-        throw new Error("Method not implemented.");
-    }
-    updateReceiverAddress(id: string): Promise<Solicitation | null> {
-        throw new Error("Method not implemented.");
-    }
-}*/
+}

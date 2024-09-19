@@ -12,6 +12,8 @@ import { FindUserSolicitationController } from './infrastructure/controllers/fin
 import { DatabaseModule } from './infrastructure/database/database.module'
 import { CreateUserUseCase } from './domain/use-cases/create-user'
 import { CryptographyModule } from './infrastructure/auth/cryptography.module'
+import { GetQuestionByUserUseCase } from './domain/use-cases/get-solicitation-by-user'
+import { CreateSolicitationUseCase } from './domain/use-cases/create-solicitation'
 
 @Module({
   imports: [
@@ -33,7 +35,9 @@ import { CryptographyModule } from './infrastructure/auth/cryptography.module'
     DeletesolicitationController
   ],
   providers: [
-    CreateUserUseCase
+    CreateUserUseCase,
+    CreateSolicitationUseCase,
+    GetQuestionByUserUseCase
   ]
 })
 export class AppModule {}

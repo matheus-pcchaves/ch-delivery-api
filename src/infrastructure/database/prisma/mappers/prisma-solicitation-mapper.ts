@@ -9,7 +9,6 @@ export class PrismaSolicitationMapper {
                 customerId: new UniqueEntityID(raw.customerId),
                 productName: raw.productName,
                 category: raw.category,
-                tracking: raw.tracking,
                 shipperAddress: raw.shipperAddress,
                 receiverAddress: raw.receiverAddress
             },
@@ -23,7 +22,6 @@ export class PrismaSolicitationMapper {
             customerId: solicitation.customerId.toString(),
             productName: solicitation.productName,
             category: solicitation.category,
-            tracking: solicitation.tracking,
             shipperAddress: solicitation.shipperAddress,
             receiverAddress: solicitation.receiverAddress
         }

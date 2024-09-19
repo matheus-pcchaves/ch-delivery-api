@@ -1,32 +1,18 @@
 import { Injectable } from "@nestjs/common";
 import { SolicitationsRepository } from "../repositories/solicitations-repository";
-import { Solicitation } from "../entities/solicitation";
-import { Either, left, right } from "src/core/either";
-import { ResourceNotFoundError } from "src/core/errors/resource-not-found-error";
-
+import { right } from "src/core/either";
 
 interface SolicitationByUserUseCaseRequest {
-    customerId: string
+  customerId: string
 }
-  
-type SolicitationByUserUseCaseResponse = Either<
-  ResourceNotFoundError,
-  {
-    solicitation: Solicitation
-  }
->
 
 @Injectable()
-export class GetQuestionByUser {
+export class GetQuestionByUserUseCase {
     constructor(private solicitationsRepository: SolicitationsRepository){}
 
-    async execute({customerId}: SolicitationByUserUseCaseRequest): Promise<SolicitationByUserUseCaseResponse>{
-      const solicitation = await this.solicitationsRepository.findByUser((customerId))
-
-      if(!solicitation){
-          return left(new ResourceNotFoundError())
-      }
-
-      return right({solicitation})
+    async execute({customerId}: SolicitationByUserUseCaseRequest){
+      const solicitations = await this.solicitationsRepository.findByUser(customerId)
+      
+      return right({solicitations})
     }
 }
