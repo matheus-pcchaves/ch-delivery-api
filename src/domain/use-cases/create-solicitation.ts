@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common"
-import { CreateSolicitationsRepository } from "../repositories/create-solicitations-repository"
+import { SolicitationsRepository } from "../repositories/solicitations-repository"
 import { Solicitation } from "../entities/solicitation"
 import { Either, right } from "src/core/either"
 import { UniqueEntityID } from "src/core/entities/unique.entity.id"
@@ -19,7 +19,7 @@ type CreateSolicitationUseCaseResponse = Either <null,{
 @Injectable()
 export class CreateSolicitationUseCase {
     constructor(
-        private solicitationRepository: CreateSolicitationsRepository,
+        private solicitationRepository: SolicitationsRepository,
     ) {}
 
     async execute({
