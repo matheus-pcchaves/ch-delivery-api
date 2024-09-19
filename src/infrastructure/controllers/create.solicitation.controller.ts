@@ -2,20 +2,20 @@ import { Body, Controller, Post, UseGuards } from "@nestjs/common";
 import { CurrentUser } from "src/infrastructure/auth/current.user.decorator";
 import { JwtAuthGuard } from "src/infrastructure/auth/jwt.auth.guard";
 import { UserPayLoad } from "src/infrastructure/auth/jwt.strategy";
-import { PrismaService } from "src/infrastructure/prisma/prisma.service";
+import { PrismaService } from "src/infrastructure/database/prisma/prisma.service";
 import { ZodValidationPipe } from "src/infrastructure/validation-pipe/zod-validation-pipe";
 import { z } from "zod";
 
-const createSolicitationBodySchema = z.object ({
+const CreateSolicitationBodySchema = z.object ({
     productName: z.string(),
     category: z.string(),
     shipperAddress: z.string(),
     receiverAddress: z.string()
 })
 
-const bodyValidationPipe = new ZodValidationPipe(createSolicitationBodySchema)
+const bodyValidationPipe = new ZodValidationPipe(CreateSolicitationBodySchema)
 
-type createSolicitationBodySchema = z.infer<typeof createSolicitationBodySchema>
+type createSolicitationBodySchema = z.infer<typeof CreateSolicitationBodySchema>
 
 @Controller('/solicitations')
 @UseGuards(JwtAuthGuard)

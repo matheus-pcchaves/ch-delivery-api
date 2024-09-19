@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+/*import { Injectable } from "@nestjs/common";
 import { SolicitationsRepository } from "src/domain/repositories/solicitations-repository";
 import { PrismaService } from "../prisma.service";
 import { PrismaSolicitationMapper } from "../mappers/prisma-solicitation-mapper";
@@ -48,4 +48,4 @@ export class PrismaSolicitationRepository implements SolicitationsRepository {
     updateReceiverAddress(id: string): Promise<Solicitation | null> {
         throw new Error("Method not implemented.");
     }
-}
+}*/
