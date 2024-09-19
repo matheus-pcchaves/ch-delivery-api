@@ -1,8 +1,8 @@
 import { Body, Controller, Post, UseGuards } from "@nestjs/common";
+import { CreateSolicitationUseCase } from "src/domain/use-cases/create-solicitation";
 import { CurrentUser } from "src/infrastructure/auth/current.user.decorator";
 import { JwtAuthGuard } from "src/infrastructure/auth/jwt.auth.guard";
 import { UserPayLoad } from "src/infrastructure/auth/jwt.strategy";
-import { PrismaService } from "src/infrastructure/database/prisma/prisma.service";
 import { ZodValidationPipe } from "src/infrastructure/validation-pipe/zod-validation-pipe";
 import { z } from "zod";
 
@@ -20,7 +20,7 @@ type createSolicitationBodySchema = z.infer<typeof CreateSolicitationBodySchema>
 @Controller('/solicitations')
 @UseGuards(JwtAuthGuard)
 export class CreateSolicitationController {
-    constructor(private prisma: PrismaService){}
+    constructor(private createSolicitationUseCase: CreateSolicitationUseCase){}
 
     @Post()
     async handle(
@@ -30,14 +30,12 @@ export class CreateSolicitationController {
         const { productName, category, shipperAddress, receiverAddress } = body
         const userId = user.sub
 
-        const newSolicitation = await this.prisma.solicitations.create({
-            data: {
-                customerId: userId,
-                productName,
-                category,
-                shipperAddress,
-                receiverAddress
-            }
+        const newSolicitation = await this.createSolicitationUseCase.execute({
+            customerId: userId,
+            productName,
+            category,
+            shipperAddress,
+            receiverAddress
         })
 
         return { newSolicitation }

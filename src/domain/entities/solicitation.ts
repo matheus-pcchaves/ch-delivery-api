@@ -5,7 +5,6 @@ export interface SolicitationProps {
     customerId: UniqueEntityID,
     productName: string,
     category: string,
-    tracking: number,
     shipperAddress: string,
     receiverAddress: string
 }
@@ -29,10 +28,6 @@ export class Solicitation extends Entity<SolicitationProps> {
 
     set category(category: string) {
         this.props.category = category
-    }
-
-    get tracking() {
-        return this.props.tracking
     }
 
     get shipperAddress() {
