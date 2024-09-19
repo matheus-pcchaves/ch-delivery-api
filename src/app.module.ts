@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { PrismaService } from './infrastructure/prisma/prisma.service'
+import { PrismaService } from './infrastructure/database/prisma/prisma.service'
 import { CreateUserController } from './infrastructure/controllers/create.user.controller'
 import { AuthModule } from './infrastructure/auth/auth.module'
 import { ConfigModule } from '@nestjs/config'
@@ -8,6 +8,8 @@ import { AuthenticateController } from './infrastructure/controllers/authenticat
 import { CreateSolicitationController } from './infrastructure/controllers/create.solicitation.controller'
 import { UpdateReceiverAddress, UpdateSolicitationAddressController } from './infrastructure/controllers/update.solicitation.address.controller'
 import { DeletesolicitationController } from './infrastructure/controllers/delete.solicitation.controller'
+import { FindUserSolicitationController } from './infrastructure/controllers/find.user.solicitation.controller'
+import { DatabaseModule } from './infrastructure/database/database.module'
 
 @Module({
   imports: [
@@ -15,7 +17,8 @@ import { DeletesolicitationController } from './infrastructure/controllers/delet
       validate: (env) => envSchema.parse(env),
       isGlobal: true,
     }),
-    AuthModule
+    AuthModule,
+    DatabaseModule
   ],
   controllers: [
     CreateUserController, 
@@ -23,8 +26,8 @@ import { DeletesolicitationController } from './infrastructure/controllers/delet
     CreateSolicitationController, 
     UpdateSolicitationAddressController, 
     UpdateReceiverAddress,
+    FindUserSolicitationController,
     DeletesolicitationController
   ],
-  providers: [PrismaService],
 })
 export class AppModule {}
