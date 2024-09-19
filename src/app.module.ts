@@ -10,6 +10,8 @@ import { UpdateReceiverAddress, UpdateSolicitationAddressController } from './in
 import { DeletesolicitationController } from './infrastructure/controllers/delete.solicitation.controller'
 import { FindUserSolicitationController } from './infrastructure/controllers/find.user.solicitation.controller'
 import { DatabaseModule } from './infrastructure/database/database.module'
+import { CreateUserUseCase } from './domain/use-cases/create-user'
+import { CryptographyModule } from './infrastructure/auth/cryptography.module'
 
 @Module({
   imports: [
@@ -18,7 +20,8 @@ import { DatabaseModule } from './infrastructure/database/database.module'
       isGlobal: true,
     }),
     AuthModule,
-    DatabaseModule
+    DatabaseModule,
+    CryptographyModule
   ],
   controllers: [
     CreateUserController, 
@@ -29,5 +32,8 @@ import { DatabaseModule } from './infrastructure/database/database.module'
     FindUserSolicitationController,
     DeletesolicitationController
   ],
+  providers: [
+    CreateUserUseCase
+  ]
 })
 export class AppModule {}
