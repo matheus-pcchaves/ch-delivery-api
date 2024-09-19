@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, HttpStatus, UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "src/infrastructure/auth/jwt.auth.guard";
-import { PrismaService } from "src/infrastructure/prisma/prisma.service";
+import { PrismaService } from "src/infrastructure/database/prisma/prisma.service";
 
 type deleteSolicitation = { id: string }
 
