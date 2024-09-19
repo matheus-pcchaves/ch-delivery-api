@@ -8,6 +8,7 @@ interface CreateSolicitationUseCaseRequest {
     customerId,
     productName: string,
     category: string,
+    tracking: number,
     shipperAddress: string,
     receiverAddress: string
 }
@@ -26,6 +27,7 @@ export class CreateSolicitationUseCase {
         customerId,
         productName,
         category,
+        tracking,
         shipperAddress,
         receiverAddress
     }: CreateSolicitationUseCaseRequest): Promise<CreateSolicitationUseCaseResponse> {
@@ -34,6 +36,7 @@ export class CreateSolicitationUseCase {
             customerId: new UniqueEntityID(customerId),
             productName,
             category,
+            tracking,
             shipperAddress,
             receiverAddress
         })
