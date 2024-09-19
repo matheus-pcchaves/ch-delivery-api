@@ -1,6 +1,5 @@
-import { ConflictException, HttpCode, Controller, Body, Post, UsePipes } from '@nestjs/common'
-import { hash } from 'bcryptjs'
-import { PrismaService } from 'src/infrastructure/database/prisma/prisma.service'
+import { ConflictException, HttpCode, Controller, Body, Post, UsePipes, BadRequestException } from '@nestjs/common'
+import { CreateUserUseCase, UserExistsError } from 'src/domain/use-cases/create-user'
 import { ZodValidationPipe } from 'src/infrastructure/validation-pipe/zod-validation-pipe'
 import { z } from 'zod'
 
@@ -11,54 +10,34 @@ const createAccountBodySchema = z.object ({
     password: z.string(),
 })
 
-type createAccountBodySchema = z.infer<typeof createAccountBodySchema>
+type CreateAccountBodySchema = z.infer<typeof createAccountBodySchema>
 
 @Controller('/users')
 export class CreateUserController {
-    constructor(private prisma: PrismaService){}
+    constructor(private createUserUseCase: CreateUserUseCase) {}
 
     @Post()
     @HttpCode(201)
     @UsePipes(new ZodValidationPipe(createAccountBodySchema))
-    async handle(@Body() body: createAccountBodySchema){
-        const { name, cpf, email, password } = createAccountBodySchema.parse(body)
+    async handle(@Body() body: CreateAccountBodySchema){
+        const { name, cpf, email, password } = body
 
-        const userWithSameEmail = await this.prisma.users.findUnique({
-            where: {
-                email,
-            },
+        const data = await this.createUserUseCase.execute({
+            name,
+            cpf,
+            email,
+            password
         })
 
-        if(userWithSameEmail) {
-            throw new ConflictException(
-                'Este e-mail já está em uso na plataforma.'
-            )
-        }
+        if(data.isLeft()) {
+            const error = data.value
 
-        const userWithSameCPF = await this.prisma.users.findUnique({
-            where: {
-                cpf,
-            },
-        })
-
-        if(userWithSameCPF) {
-            throw new ConflictException(
-                'CPF incorreto.'
-            )
-        }
-
-        const hashedPassword = await hash(password, 8)
-
-        const newUser = await this.prisma.users.create({
-            data: {
-                name,
-                email,
-                cpf,
-                password: hashedPassword
+            switch(error.constructor){
+                case UserExistsError:
+                    throw new ConflictException(error.message)
+                default:
+                    throw new BadRequestException(error.message)
             }
-        })
-
-        return console.log(newUser)
+        }
     }
-
 }
